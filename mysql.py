@@ -3,6 +3,7 @@
 '''
 #-----------------------------------------------------------
 # @author     道心空
+# @qq		  342701293
 # @date       2013-08-17
 # @decscript  mysql 操作类  CURD 封装
 #	
@@ -26,16 +27,21 @@ class Mysql(object):
 
 		super(Mysql, self).__init__()
 		self.__user    = db['user'];
+		self.__db      = db['db'];
 		self.__passwd  = db['passwd']; 
 		self.__host    = db['host'];
 		self.__charset = db['charset'];
 
 
 	def conn(self):
-		self.__conn =  MySQLdb.connect(user='root', db='student', passwd='root', host='localhost', charset='utf8') ; 
-		self.__conn = self.__conn.cursor( cursorclass=MySQLdb.cursors.DictCursor);
-		#MySQLdb.cursors.Cursor， 默认值，执行SQL语句返回List，每行数据为tuple
-		#MySQLdb.cursors.DictCursor， 执行SQL语句返回List，每行数据为Dict
+		try:
+			self.__conn =  MySQLdb.connect(user=self.__user, db=self.__db, passwd=self.__passwd, host=self.__host , charset=self.__charset) ; 
+			self.__conn = self.__conn.cursor( cursorclass=MySQLdb.cursors.DictCursor);
+			#MySQLdb.cursors.Cursor， 默认值，执行SQL语句返回List，每行数据为tuple
+			#MySQLdb.cursors.DictCursor， 执行SQL语句返回List，每行数据为Dict
+
+		except MySQLdb.Error,e:
+			return "Mysql Error %d: %s" % (e.args[0], e.args[1]);
 
 	"""
 	* -------------------------------------------------------------
